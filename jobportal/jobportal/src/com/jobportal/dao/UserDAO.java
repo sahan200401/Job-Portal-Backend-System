@@ -114,7 +114,7 @@ public class UserDAO {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getEmail());
             pstmt.setString(3, user.getRole().name());
-            pstmt.setInt(4, user.getUserId());
+            pstmt.setInt(4, user.getUserid());
 
             return pstmt.executeUpdate() > 0;
         }
@@ -140,7 +140,7 @@ public class UserDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setInt(1, profile.getUserId());
+            pstmt.setInt(1, profile.getUserid());
             pstmt.setString(2, profile.getFullName());
             pstmt.setString(3, profile.getPhone());
             pstmt.setString(4, profile.getSkills());
@@ -230,7 +230,7 @@ public class UserDAO {
     // Helper method to extract User from ResultSet
     private User extractUserFromResultSet(ResultSet rs) throws SQLException {
         User user = new User();
-        user.setUserId(rs.getInt("user_id"));
+        user.setUserid(rs.getInt("user_id"));
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password"));
         user.setEmail(rs.getString("email"));
@@ -244,7 +244,7 @@ public class UserDAO {
     private CandidateProfile extractCandidateProfileFromResultSet(ResultSet rs) throws SQLException {
         CandidateProfile profile = new CandidateProfile();
         profile.setProfileId(rs.getInt("profile_id"));
-        profile.setUserId(rs.getInt("user_id"));
+        profile.setUserid(rs.getInt("user_id"));
         profile.setFullName(rs.getString("full_name"));
         profile.setPhone(rs.getString("phone"));
         profile.setSkills(rs.getString("skills"));
