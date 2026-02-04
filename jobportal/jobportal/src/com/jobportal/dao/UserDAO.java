@@ -18,7 +18,6 @@ public class UserDAO {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
             pstmt.setString(3, user.getEmail());
-            pstmt.setString(4, user.getRole().name());
 
             int affectedRows = pstmt.executeUpdate();
 
@@ -113,7 +112,6 @@ public class UserDAO {
 
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getEmail());
-            pstmt.setString(3, user.getRole().name());
             pstmt.setInt(4, user.getUserid());
 
             return pstmt.executeUpdate() > 0;
@@ -234,7 +232,6 @@ public class UserDAO {
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password"));
         user.setEmail(rs.getString("email"));
-        user.setRole(User.Role.valueOf(rs.getString("role")));
         user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         user.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
         return user;
