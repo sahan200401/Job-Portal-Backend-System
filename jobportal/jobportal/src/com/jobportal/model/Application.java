@@ -2,22 +2,33 @@ package com.jobportal.model;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a job application submitted by a candidate.
+ *
+ * Stores details like the candidate, the job applied for, cover letter,
+ * application status, and timestamps for tracking.
+ */
 public class Application {
-    private int applicationId;
-    private int jobId;
-    private int candidateId;
-    private String coverLetter;
-    private ApplicationStatus status;
-    private LocalDateTime appliedDate;
-    private LocalDateTime updatedAt;
 
+    private int applicationId;       // Unique ID for the application
+    private int jobId;               // ID of the job being applied to
+    private int candidateId;         // ID of the candidate applying
+    private String coverLetter;      // Optional cover letter text
+    private ApplicationStatus status; // Current status of the application
+    private LocalDateTime appliedDate; // Timestamp when application was submitted
+    private LocalDateTime updatedAt;   // Timestamp of last update
 
-    public enum ApplicationStatus{
+    /**
+     * Enum representing all possible statuses of an application.
+     */
+    public enum ApplicationStatus {
         PENDING, REVIEWED, SHORTLISTED, REJECTED, ACCEPTED
     }
 
-    public Application(){}
+    // Default constructor
+    public Application() {}
 
+    // Constructor for creating a new application
     public Application(int jobId, int candidateId, String coverLetter, ApplicationStatus status) {
         this.jobId = jobId;
         this.candidateId = candidateId;
@@ -25,61 +36,27 @@ public class Application {
         this.status = status;
     }
 
-    public int getApplicationId() {
-        return applicationId;
-    }
+    // Getters and setters
+    public int getApplicationId() { return applicationId; }
+    public void setApplicationId(int applicationId) { this.applicationId = applicationId; }
 
-    public void setApplicationId(int applicationId) {
-        this.applicationId = applicationId;
-    }
+    public int getJobId() { return jobId; }
+    public void setJobId(int jobId) { this.jobId = jobId; }
 
-    public int getJobId() {
-        return jobId;
-    }
+    public int getCandidateId() { return candidateId; }
+    public void setCandidateId(int candidateId) { this.candidateId = candidateId; }
 
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
-    }
+    public String getCoverLetter() { return coverLetter; }
+    public void setCoverLetter(String coverLetter) { this.coverLetter = coverLetter; }
 
-    public int getCandidateId() {
-        return candidateId;
-    }
+    public ApplicationStatus getStatus() { return status; }
+    public void setStatus(ApplicationStatus status) { this.status = status; }
 
-    public void setCandidateId(int candidateId) {
-        this.candidateId = candidateId;
-    }
+    public LocalDateTime getAppliedDate() { return appliedDate; }
+    public void setAppliedDate(LocalDateTime appliedDate) { this.appliedDate = appliedDate; }
 
-    public String getCoverLetter() {
-        return coverLetter;
-    }
-
-    public void setCoverLetter(String coverLetter) {
-        this.coverLetter = coverLetter;
-    }
-
-    public ApplicationStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ApplicationStatus status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getAppliedDate() {
-        return appliedDate;
-    }
-
-    public void setAppliedDate(LocalDateTime appliedDate) {
-        this.appliedDate = appliedDate;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
     @Override
     public String toString() {
