@@ -1,10 +1,14 @@
 package com.jobportal.model;
 
-import javax.management.relation.Role;
 import java.time.LocalDateTime;
 
 public class User {
-    private int userid;
+
+    public enum Role {
+        CANDIDATE, EMPLOYER, ADMIN
+    }
+
+    private int userId;
     private String username;
     private String password;
     private String email;
@@ -12,13 +16,10 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public enum role{
-        CANDIDATE, EMPLOYER, ADMIN
-    }
+    // Default constructor
+    public User() {}
 
-    public User() {
-    }
-
+    // Parameterized constructor
     public User(String username, String password, String email, Role role) {
         this.username = username;
         this.password = password;
@@ -26,20 +27,13 @@ public class User {
         this.role = role;
     }
 
-    public User(int userid, String username, String password, String email, Role role) {
-        this.userid = userid;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
+    // ✅ FIXED: consistent field name 'userId' with matching getter/setter
+    public int getUserId() {
+        return userId;
     }
 
-    public int getUserid() {
-        return userid;
-    }
-
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -93,13 +87,10 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userid=" + userid +
+                "userId=" + userId +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", role=" + role +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
                 '}';
     }
 }
