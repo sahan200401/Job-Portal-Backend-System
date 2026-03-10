@@ -18,6 +18,7 @@ public class UserDAO {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
             pstmt.setString(3, user.getEmail());
+            pstmt.setString(4, user.getRole().name());
 
             int affectedRows = pstmt.executeUpdate();
 
@@ -34,17 +35,20 @@ public class UserDAO {
 
     // Find user by username and password
     public User findByUsernameAndPassword(String username, String password) throws SQLException {
-        String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+        String query = "SELECT * FROM users WHERE username = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setString(1, username);
-            pstmt.setString(2, password);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return extractUserFromResultSet(rs);
+                    User user = extractUserFromResultSet(rs);
+                    // ✅ FIXED: password compared safely in Java
+                    if (user.getPassword() != null && user.getPassword().equals(password)) {
+                        return user;
+                    }
                 }
             }
         }
@@ -112,7 +116,9 @@ public class UserDAO {
 
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getEmail());
-            pstmt.setInt(4, user.getUserid());
+            pstmt.setString(3, user.getRole().name());
+            // ✅ FIXED: uses getUserId() consistently
+            pstmt.setInt(4, user.getUserId());
 
             return pstmt.executeUpdate() > 0;
         }
@@ -138,7 +144,7 @@ public class UserDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setInt(1, profile.getUserid());
+            pstmt.setInt(1, profile.getUserId());
             pstmt.setString(2, profile.getFullName());
             pstmt.setString(3, profile.getPhone());
             pstmt.setString(4, profile.getSkills());
@@ -225,23 +231,40 @@ public class UserDAO {
         return null;
     }
 
-    // Helper method to extract User from ResultSet
+    // ✅ FIXED: null-safe timestamps + null-safe Role parsing + consistent getUserId/setUserId
     private User extractUserFromResultSet(ResultSet rs) throws SQLException {
         User user = new User();
-        user.setUserid(rs.getInt("user_id"));
+        // ✅ FIXED: calls setUserId() — matches field 'userId' in User.java
+        user.setUserId(rs.getInt("user_id"));
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password"));
         user.setEmail(rs.getString("email"));
-        user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        user.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+
+        // ✅ FIXED: null-safe Role parsing
+        String roleStr = rs.getString("role");
+        if (roleStr != null) {
+            user.setRole(User.Role.valueOf(roleStr));
+        }
+
+        // ✅ FIXED: null-safe timestamp parsing
+        Timestamp createdAt = rs.getTimestamp("created_at");
+        if (createdAt != null) {
+            user.setCreatedAt(createdAt.toLocalDateTime());
+        }
+
+        Timestamp updatedAt = rs.getTimestamp("updated_at");
+        if (updatedAt != null) {
+            user.setUpdatedAt(updatedAt.toLocalDateTime());
+        }
+
         return user;
     }
 
-    // Helper method to extract CandidateProfile from ResultSet
+    // ✅ FIXED: null-safe timestamps for CandidateProfile
     private CandidateProfile extractCandidateProfileFromResultSet(ResultSet rs) throws SQLException {
         CandidateProfile profile = new CandidateProfile();
         profile.setProfileId(rs.getInt("profile_id"));
-        profile.setUserid(rs.getInt("user_id"));
+        profile.setUserId(rs.getInt("user_id"));
         profile.setFullName(rs.getString("full_name"));
         profile.setPhone(rs.getString("phone"));
         profile.setSkills(rs.getString("skills"));
@@ -249,12 +272,21 @@ public class UserDAO {
         profile.setEducation(rs.getString("education"));
         profile.setResumeUrl(rs.getString("resume_url"));
         profile.setLocation(rs.getString("location"));
-        profile.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        profile.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+
+        Timestamp createdAt = rs.getTimestamp("created_at");
+        if (createdAt != null) {
+            profile.setCreatedAt(createdAt.toLocalDateTime());
+        }
+
+        Timestamp updatedAt = rs.getTimestamp("updated_at");
+        if (updatedAt != null) {
+            profile.setUpdatedAt(updatedAt.toLocalDateTime());
+        }
+
         return profile;
     }
 
-    // Helper method to extract EmployerProfile from ResultSet
+    // ✅ FIXED: null-safe timestamps for EmployerProfile
     private EmployerProfile extractEmployerProfileFromResultSet(ResultSet rs) throws SQLException {
         EmployerProfile profile = new EmployerProfile();
         profile.setProfileId(rs.getInt("profile_id"));
@@ -265,8 +297,17 @@ public class UserDAO {
         profile.setWebsite(rs.getString("website"));
         profile.setDescription(rs.getString("description"));
         profile.setLocation(rs.getString("location"));
-        profile.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        profile.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+
+        Timestamp createdAt = rs.getTimestamp("created_at");
+        if (createdAt != null) {
+            profile.setCreatedAt(createdAt.toLocalDateTime());
+        }
+
+        Timestamp updatedAt = rs.getTimestamp("updated_at");
+        if (updatedAt != null) {
+            profile.setUpdatedAt(updatedAt.toLocalDateTime());
+        }
+
         return profile;
     }
 }
