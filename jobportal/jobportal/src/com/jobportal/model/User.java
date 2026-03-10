@@ -2,24 +2,26 @@ package com.jobportal.model;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a user in the Job Portal system.
+ * Users can be candidates, employers, or admins.
+ */
 public class User {
 
     public enum Role {
         CANDIDATE, EMPLOYER, ADMIN
     }
 
-    private int userId;
-    private String username;
-    private String password;
-    private String email;
-    private Role role;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private int userId;               // Unique user ID
+    private String username;          // Username for login
+    private String password;          // Encrypted password
+    private String email;             // User email
+    private Role role;                // User role in the system
+    private LocalDateTime createdAt;  // Account creation timestamp
+    private LocalDateTime updatedAt;  // Last account update timestamp
 
-    // Default constructor
     public User() {}
 
-    // Parameterized constructor
     public User(String username, String password, String email, Role role) {
         this.username = username;
         this.password = password;
@@ -27,62 +29,27 @@ public class User {
         this.role = role;
     }
 
-    // ✅ FIXED: consistent field name 'userId' with matching getter/setter
-    public int getUserId() {
-        return userId;
-    }
+    // Getters and setters
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getPassword() {
-        return password;
-    }
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
     @Override
     public String toString() {
