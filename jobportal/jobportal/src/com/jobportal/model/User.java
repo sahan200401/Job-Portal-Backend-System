@@ -1,5 +1,6 @@
 package com.jobportal.model;
 
+import com.jobportal.util.PasswordUtil;
 import java.time.LocalDateTime;
 
 /**
@@ -14,7 +15,7 @@ public class User {
 
     private int userId;               // Unique user ID
     private String username;          // Username for login
-    private String password;          // Encrypted password
+    private String password;          // Hashed password
     private String email;             // User email
     private Role role;                // User role in the system
     private LocalDateTime createdAt;  // Account creation timestamp
@@ -24,7 +25,14 @@ public class User {
 
     public User(String username, String password, String email, Role role) {
         this.username = username;
-        this.password = password;
+        this.setPassword(password); // Hash the password
+        this.email = email;
+        this.role = role;
+    }
+
+    public User(String username, String hashedPassword, String email, Role role, boolean isHashed) {
+        this.username = username;
+        this.password = hashedPassword; // Already hashed
         this.email = email;
         this.role = role;
     }
@@ -37,7 +45,18 @@ public class User {
     public void setUsername(String username) { this.username = username; }
 
     public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    
+    public void setPassword(String password) { 
+        this.password = PasswordUtil.hashPassword(password); 
+    }
+    
+    public void setHashedPassword(String hashedPassword) {
+        this.password = hashedPassword;
+    }
+    
+    public boolean verifyPassword(String plainPassword) {
+        return PasswordUtil.verifyPassword(plainPassword, this.password);
+    }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
