@@ -45,8 +45,8 @@ public class UserDAO {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     User user = extractUserFromResultSet(rs);
-                    // ✅ FIXED: password compared safely in Java
-                    if (user.getPassword() != null && user.getPassword().equals(password)) {
+                    // ✅ FIXED: password verification using BCrypt
+                    if (user != null && user.verifyPassword(password)) {
                         return user;
                     }
                 }
@@ -231,13 +231,14 @@ public class UserDAO {
         return null;
     }
 
-    // ✅ FIXED: null-safe timestamps + null-safe Role parsing + consistent getUserId/setUserId
+    // ✅ FIXED: null-safe timestamps + null-safe Role parsing + consistent getUserId/setUserId + hashed password handling
     private User extractUserFromResultSet(ResultSet rs) throws SQLException {
         User user = new User();
         // ✅ FIXED: calls setUserId() — matches field 'userId' in User.java
         user.setUserId(rs.getInt("user_id"));
         user.setUsername(rs.getString("username"));
-        user.setPassword(rs.getString("password"));
+        // ✅ FIXED: set hashed password directly without re-hashing
+        user.setHashedPassword(rs.getString("password"));
         user.setEmail(rs.getString("email"));
 
         // ✅ FIXED: null-safe Role parsing
