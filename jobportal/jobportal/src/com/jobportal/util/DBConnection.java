@@ -5,10 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/job_portal";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "9103865429";
-
     private static Connection connection = null;
 
     private DBConnection() {}
@@ -18,7 +14,11 @@ public class DBConnection {
         if (connection == null || connection.isClosed()){
             try{
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                connection = DriverManager.getConnection(
+                    ConfigUtil.getDbUrl(), 
+                    ConfigUtil.getDbUsername(), 
+                    ConfigUtil.getDbPassword()
+                );
                 System.out.println("Database connection established successfully!");
             }catch (ClassNotFoundException e){
                 System.err.println("MySQL JDBC Driver not found.");
